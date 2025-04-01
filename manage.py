@@ -20,3 +20,8 @@ def main():
 
 if __name__ == '__main__':
     main()
+from waitress import serve
+from config.wsgi import application  # 'my_project' ni o'zingizning loyiha nomingizga almashtiring
+
+if __name__ == "__main__":
+    serve(application, host="0.0.0.0", port=8000)
