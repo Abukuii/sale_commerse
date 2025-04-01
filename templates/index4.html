@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savdo do'koni</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <section id="section">
+        <!-- Header ------------------------- -->
+        <header>
+            
+            <!-- Logo ----------------- -->
+            <div class="logo">
+                <h2>
+                    <a href="index.html">
+                        Savdo <br>
+                        Do'koni
+                    </a>
+                </h2>
+            </div>
+            
+            <!-- Navbar ----------------------- -->
+            <nav class="navbar">
+                <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined"><i class='bx bx-x bx-spin'></i></span>
+                <li><a href="index1.html">Savdo<br>bo'limi</a></li>
+                <li><a href="index2.html">Barcha<br>Mahsulotlar</a></li>
+                <li><a href="index3.html">Kamaygan<br>Mahsulotlar </a></li>
+                <li class="active"><a href="index4.html">Nasiya<br>Savdo</a></li>
+                <li><a href="/index.html">Chiqish</a></li>
+            </ul>
+            <span id="hamburger-btn" class="material-symbols-outlined"><i class='bx bx-menu'></i></span>
+        </nav>
+    </header>
+    
+    <!-- Search Bo'lim --------------- -->
+    <div class="search">
+        <label for="search">
+            <input type="search" id="search" placeholder="Mahsulot nomi">
+            <i class='bx bx-search-alt-2'></i>
+        </label>
+        <div class="add">
+            <button type="button" class="btn" onclick="plusmenu()" ><span>+</span> Qo'shish</button>
+         </div>
+    </div>
+    <!-- Asosiy Bo'lim --------------- -->
+    <div class="main nasiya">
+
+        <table class="products_all">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <!-- <th class="foto">Rasmi</th> -->
+                    <th>Xaridor Ismi</th>
+                    <th>Mahsulotlar</th>
+                    <th>Sana</th>
+                    <th>Jami Summa</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+<!--                <tr>-->
+<!--                    <td>1</td>-->
+<!--                    &lt;!&ndash; <td><img src="../img/img1.jpg" alt=""> </td> &ndash;&gt;-->
+<!--                    <td class="name">Bolta</td>-->
+<!--                    <td class="name">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ad nisi sit libero dolor molestias corporis laborum nesciunt. Odit, sed dolorem quidem molestiae nobis ipsam, debitis necessitatibus ex eveniet, fugiat quos?</td>-->
+<!--                    <td>25.04.2024</td>-->
+<!--                    <td>100</td>-->
+<!--                    <td onclick="rename()" class="pen">-->
+<!--                        <i class='bx bxs-pencil'></i>-->
+<!--                    </td>-->
+<!--                    <td onclick="del()">-->
+<!--                        <i class='bx bxs-trash-alt'></i>-->
+<!--                    </td>-->
+<!--                </tr>-->
+               {% for i in debtors %}
+                    <tr>
+                        <td>{{i.id}}</td>
+                        <td>{{i.full_name}} {{i.phone_number}}</td>
+                        <td>{{i.product.name}}</td>
+                        <td>{{i.date}}</td>
+                        <td>{{i.price}}</td>
+                        <td><a href="#" onclick="toggle()"><i class='bx bxs-pencil'></i></a></td>
+                        <td><a href="#" onclick="sorov()"><i class='bx bxs-trash-alt'></i></a></td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+    <!-- Footer Sectiopn --------------------- -->
+    <div class="footer">
+        <div class="right-summ maxbox">
+            <p>
+                Jami Summa: <input class="sum" type="text" value="25 000" readonly>
+            </p>
+        </div>
+    </div>
+
+
+</section>
+
+
+
+<!-- Mahsulot qo'shish tahrirlash -->
+<div id="plus">
+    <a href="#" onclick="plusmenu()"><i class='bx bx-x bx-tada'></i></a>
+    <h3>Xaridor qo'shish</h3>
+    <form action="#">
+        <input type="text" placeholder="Xaridor Ismi" required>
+        <input type="text" placeholder="Mahsulot Nomi" required>
+        <input type="datetime-local" required>
+        <input type="number" placeholder="Jami Summa" required>
+        <button>Qo'shish</button>
+    </form>
+</div>
+
+
+<!-- Tahrirlash bo'limi-------------- -->
+
+<div id="rename">
+    <a href="#" onclick="rename()"><i class='bx bx-x bx-tada'></i></a>
+    <h3>Tahrirlash</h3>
+    <form action="#">
+        <input type="text" placeholder="Xaridor Ismi" required>
+        <input type="text" placeholder="Mahsulotlar" required>
+        <input type="datetime-local" required>
+        <input type="number" placeholder="Jami Summa" required>
+        <button>Qo'shish</button>
+    </form>
+</div>
+
+
+<!-- O'chirish bo'limi -------------- -->
+
+
+<div id="remove">
+    <h3>Ushbu Xaridorni o'chirishni xohlaysizmi?</h3>
+    <a href="#" onclick="del()">Yo'q</a>
+    <a href="index4.html">Ha</a>
+</div>
+
+
+
+
+<script src="../js/main.js"></script>
+</body>
+</html>

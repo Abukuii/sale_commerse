@@ -1,0 +1,7 @@
+<h2>Mahsulotni tahrirlash: {{ product.name }}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">💾 Saqlash</button>
+    <a href="{% url 'product_list' %}">⬅️ Bekor qilish</a>
+</form>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savdo do'koni</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <section id="section">
+        <!-- Header ------------------------- -->
+        <header>
+            
+            <!-- Logo ----------------- -->
+            <div class="logo">
+                <h2>
+                    <a href="/">
+                        Savdo <br>
+                        Do'koni
+                    </a>
+                </h2>
+            </div>
+            
+            <!-- Navbar ----------------------- -->
+            <nav class="navbar">
+                <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined"><i class='bx bx-x bx-spin'></i></span>
+                <li class="active"><a href="#">Savdo<br>bo'limi</a></li>
+                <li><a href="{% url 'product_list' %}">Barcha<br>Mahsulotlar</a></li>
+                <li><a href="{% url 'low_stock_products' %}">Kamaygan<br>Mahsulotlar </a></li>
+                <li><a href="#">Nasiya<br>Savdo</a></li>
+                <li><a href="{% url 'logout' %}">Chiqish</a></li>
+            </ul>
+            <span id="hamburger-btn" class="material-symbols-outlined"><i class='bx bx-menu'></i></span>
+        </nav>
+    </header>
+           <!-- Search Bo'lim --------------- -->
+    <div class="search">
+        <form method="GET" action="{% url 'trade' %}">
+        <label for="search">
+            <input type="search" id="search" name="q" value="{{ query }}" placeholder="Mahsulot nomi">
+            <button type="submit">
+            <i class='bx bx-search-alt-2'></i>
+            </button>
+        </label>
+        </form>
+    </div>
+    <form action="{% url 'add_to_cart' %}" id="add-to-cart-form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="confirm_order" value="1">
+        <!-- Добавляем скрытое поле для передачи идентификатора продукта -->
+        <input type="hidden" name="product_id" value="">
+            <div class="Main">
+
+                <table cellspacing="3">
+                    <thead>
+                       <tr>-->
+                            <th class="num">№</th>
+                            <th class="foto">Rasmi</th>
+                            <th class="name">Nomi</th>
+                            <th class="num2">Soni</th>
+                            <th class="summ">Narxi</th>
+                            <th>Buyurtma</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td class="image">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" width="60px">
+                                {% else %}
+                                    <img src="/static/img/no-image.jpg" alt="No image" width="60">
+                                {% endif %}
+                            </td>
+                            <td class="name">{{ product.name }}</td>
+                            <td>{{ product.remaining_quantity }}</td>
+                            <td>{{ product.sell_price }}</td>
+                            <!-- Используем ссылку для добавления товара в корзину -->
+                            <td class="last"><a href="#" class="add-to-cart" data-id="{{ product.id }}"><i
+                                        class='bx bx-plus b'></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Rasmi</th>
+                            <th>Nomi</th>
+                            <th>Soni</th>
+                            <th>Narxi</th>
+                            <th>X</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        <tr>
+                            <td>1</td>
+                            <td class="image"><img src="../img/img1.jpg" alt=""> </td>
+                            <td class="name">Bolta</td>
+                            <td>1</td>
+                            <td>25 000</td>
+                            <td><i class='bx bx-minus b'></i></td>
+                        </tr>
+<!--                        <iframe src="{% static 'cart.html' %}" frameborder="0" width="200px" height="200px"></iframe>-->
+                    </tbody>
+                </table>
+
+            </div>
+
+    </form>
+
+
+
+
+
+    <!-- Footer Section -------------------------------------- -->
+    
+    <div class="footer">
+        <div class="right-summ">
+            <p>
+                Jami Summa: <input class="sum" type="text" value="0" readonly>
+            </p>
+        </div>
+        <div class="left-summ">
+            <button  class="sub" type="submit">Nasia</button>
+            <button class="res" type="reset" id="clear-cart">Bekor Qilish</button>
+            <button class="sub1" type="submit" >
+                <a href="{% url 'cart' %}">Tasdiqlash</a>
+            </button>
+        </div>
+    </div>
+
+</section>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/trade.js' %}"></script>
+
+</body>
+</html>

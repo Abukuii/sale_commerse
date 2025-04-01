@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qurilish Mollari - Savatcha</title>
+    <style>
+        /* Стили для корзины */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #cart {
+            margin: 20px auto;
+            width: 80%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        td button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 2px 2px;
+            cursor: pointer;
+        }
+
+        td button:hover {
+            background-color: #45a049;
+        }
+
+        p#total_price {
+            text-align: right;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <!-- Навигационная панель -->
+    </header>
+
+    <div id="cart">
+        <h1>Savatcha</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Nomi</th>
+                    <th>Narxi</th>
+                    <th>Soni</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr id="row_{{ item.product.id }}">
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.product.name }}</td>
+                    <td class="price">{{ item.product.sell_price }}</td>
+                    <td>
+                        <!-- <button onclick="decreaseQuantity('{{ item.product.id }}')">-</button> -->
+                        <span id="quantity_{{ item.product.id }}">{{ item.quantity }}</span>
+                        <!-- <button onclick="increaseQuantity('{{ item.product.id }}')">+</button> -->
+                    </td>
+                    <td>
+                        <form action="{% url 'remove_from_cart' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                            <button type="submit">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p id="total_price">Jami: {{ total_price }}</p>
+        <form action="{% url 'accept_purchase' %}" method="post">
+            {% csrf_token %}
+            {% for item in cart_items %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <input type="hidden" name="quantity" value="{{ item.quantity }}">
+            {% endfor %}
+            <span><button type="submit">Принять покупку</button></span>
+        </form>
+        <h3><a href="{% url 'trade' %}" style="text-decoration: none;"><--Savdoga Kaytish</a></h3>
+    </div>
+
+    <script>
+        // Функция для уменьшения количества товара
+        function decreaseQuantity(productId) {
+            const quantityElement = document.getElementById('quantity_' + productId);
+            let quantity = parseInt(quantityElement.innerText);
+            if (quantity > 1) {
+                quantity--;
+                quantityElement.innerText = quantity;
+                updateProductTotalPrice(productId, quantity);
+            } else {
+                // Удаляем товар из корзины
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{% url "remove_from_cart" %}';
+                const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = 'csrfmiddlewaretoken';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+                const productIdInput = document.createElement('input');
+                productIdInput.type = 'hidden';
+                productIdInput.name = 'product_id';
+                productIdInput.value = productId;
+                form.appendChild(productIdInput);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Функция для увеличения количества товара
+        function increaseQuantity(productId) {
+            const quantityElement = document.getElementById('quantity_' + productId);
+            let quantity = parseInt(quantityElement.innerText);
+            quantity++;
+            quantityElement.innerText = quantity;
+            updateProductTotalPrice(productId, quantity);
+        }
+
+        // Функция для обновления общей суммы
+        function updateProductTotalPrice() {
+            let totalPrice = 0;
+            document.querySelectorAll('.price').forEach(function (priceElement) {
+                const row = priceElement.parentElement;
+                const quantity = parseInt(row.querySelector('span[id^="quantity_"]').innerText);
+                const price = parseInt(priceElement.innerText);
+                totalPrice += quantity * price;
+            });
+            document.getElementById('total_price').innerText = 'Jami: ' + totalPrice.toFixed(2);
+        }
+
+        // Функция для принятия покупки
+        // function acceptPurchase() {
+        //     const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        //     fetch('/accept_purchase/', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'X-CSRFToken': csrfToken
+        //         }
+        //     })
+        //         .then(response => {
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             }
+        //             return response.json();
+        //         })
+        //         .then(data => {
+        //             console.log('Server response:', data);
+        //             if (data.success) {
+        //                 // Очистка корзины на клиентской стороне
+        //                 document.getElementById('cart').innerHTML = '<p>Корзина пуста</p>';
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('There was a problem with the fetch operation:', error);
+        //         });
+        // }
+    </script>
+
+
+</body>
+
+</html>

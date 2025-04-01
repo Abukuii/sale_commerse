@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savdo do'koni</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <section id="section">
+        <!-- Header ------------------------- -->
+        <header>
+            
+            <!-- Logo ----------------- -->
+            <div class="logo">
+                <h2>
+                    <a href="/">
+                        Savdo <br>
+                        Do'koni
+                    </a>
+                </h2>
+            </div>
+            
+            <!-- Navbar ----------------------- -->
+            <nav class="navbar">
+                <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined"><i class='bx bx-x bx-spin'></i></span>
+                <li><a href="{% url 'trade' %}">Savdo<br>bo'limi</a></li>
+                <li><a href="{% url 'product_list' %}">Barcha<br>Mahsulotlar</a></li>
+                <li class="active"><a href="#">Kamaygan<br>Mahsulotlar </a></li>
+                <li><a href="#">Nasiya<br>Savdo</a></li>
+                <li><a href="{% url 'logout' %}">Chiqish</a></li>
+            </ul>
+            <span id="hamburger-btn" class="material-symbols-outlined"><i class='bx bx-menu'></i></span>
+        </nav>
+    </header>
+
+    <!-- Search Bo'lim --------------- -->
+    <div class="search">
+        <form method="GET" action="{% url 'low_stock_products' %}">
+        <label for="search">
+            <input type="search" id="search" name="q" value="{{ query }}" placeholder="Mahsulot nomi">
+            <button type="submit">
+            <i class='bx bx-search-alt-2'></i>
+            </button>
+        </label>
+        </form>
+    </div>
+    <!-- Asosiy Bo'lim --------------- -->
+    <div class="main">
+
+        <table class="products_all">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th class="foto">Rasmi</th>
+                    <th>Mahsulot Nomi</th>
+                    <th>Soni</th>
+                    <th>Narxi</th>
+                    <th>Sotildi</th>
+                    <th>Qoldi</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" width="60">
+                        {% else %}
+                            <img src="/static/img/no-image.jpg" alt="No image" width="60">
+                        {% endif %}
+                    </td>
+                    <td class="name">{{ product.name }}</td>
+                    <td>{{ product.total_quantity }}</td>
+                    <td>{{ product.sell_price }}</td>
+                    <td>{{ product.sold_quantity }}</td>
+                    <td>{{ product.remaining_quantity }}</td>
+                    <td class="pen">
+                        <a href="{% url 'edit_product' product.id %}" style="color: lime;"><i class='bx bxs-pencil'></i></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')" style="color: red;">
+                            <i class='bx bxs-trash-alt'></i>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">Kamaygan mahsulot yo‘q.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--    &lt;!&ndash; Search Bo'lim -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
+<!--    <div class="search">-->
+<!--        <label for="search">-->
+<!--            <input type="search" id="search" placeholder="Mahsulot nomi">-->
+<!--            <i class='bx bx-search-alt-2'></i>-->
+<!--        </label>-->
+<!--        <div class="add">-->
+<!--            <button type="button" class="btn" onclick="plusmenu()" ><span>+</span> Qo'shish</button>-->
+<!--         </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; Asosiy Bo'lim -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
+<!--    <div class="main red">-->
+
+<!--        <table>-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    <th>№</th>-->
+<!--                    <th class="foto">Rasmi</th>-->
+<!--                    <th>Mahsulot Nomi</th>-->
+<!--                    <th>Soni</th>-->
+<!--                    <th>Kelish Narxi</th>-->
+<!--                    <th>Sotilish Narxi</th>-->
+<!--                    <th>Sotildi</th>-->
+<!--                    <th>Qoldi</th>-->
+<!--                    <th>Edit</th>-->
+<!--                    <th>Delete</th>-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                {% for dep in dependents %}-->
+<!--                <tr>-->
+<!--                    <td>{{forloop.counter}}</td>-->
+<!--                    <td class="image"><img src="{% static 'img/img1.jpg' %}" alt=""> </td>-->
+<!--                    <td class="name">{{dep.first_name}} {{dep.last_name}}</td>-->
+<!--                    <td>200</td>-->
+<!--                    <td>20 000</td>-->
+<!--                    <td>25 000</td>-->
+<!--                    <td>100</td>-->
+<!--                    <td>100</td>-->
+<!--                    <td onclick="rename()" class="pen">-->
+<!--                        <i class='bx bxs-pencil'></i>-->
+<!--                    </td>-->
+<!--                    <td onclick="del()">-->
+<!--                        <i class='bx bxs-trash-alt'></i>-->
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                {% endfor %}-->
+<!--               -->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</section>-->
+
+<!--<script src="../js/main.js"></script>-->
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savdo do'koni</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <section id="section">
+        <!-- Header ------------------------- -->
+        <header>
+            
+            <!-- Logo ----------------- -->
+            <div class="logo">
+                <h2>
+                    <a href="/">
+                        Savdo <br>
+                        Do'koni
+                    </a>
+                </h2>
+            </div>
+            
+            <!-- Navbar ----------------------- -->
+            <nav class="navbar">
+                <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined"><i class='bx bx-x bx-spin'></i></span>
+                <li><a href="{% url 'trade' %}">Savdo<br>bo'limi</a></li>
+                <li class="active"><a href="#">Barcha<br>Mahsulotlar</a></li>
+                <li><a href="{% url 'low_stock_products' %}">Kamaygan<br>Mahsulotlar </a></li>
+                <li><a href="#">Nasiya<br>Savdo</a></li>
+                <li><a href="{% url 'logout' %}">Chiqish</a></li>
+            </ul>
+            <span id="hamburger-btn" class="material-symbols-outlined"><i class='bx bx-menu'></i></span>
+        </nav>
+    </header>
+    
+    <!-- Search Bo'lim --------------- -->
+    <div class="search">
+        <form method="GET" action="{% url 'product_list' %}">
+        <label for="search">
+            <input type="search" id="search" name="q" value="{{ query }}" placeholder="Mahsulot nomi">
+            <button type="submit">
+            <i class='bx bx-search-alt-2'></i>
+            </button>
+        </label>
+        </form>
+        <div class="add">
+            <button type="button" class="btn">
+                <a href="{% url 'add_product' %}" style="text-decoration: none; color: white;">
+                    <span>+</span> Qo'shish
+                </a>
+            </button>
+         </div>
+    </div>
+    <!-- Asosiy Bo'lim --------------- -->
+    <div class="main">
+
+        <table class="products_all">
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th class="foto">Rasmi</th>
+                    <th>Mahsulot Nomi</th>
+                    <th>Soni</th>
+                    <th>Narxi</th>
+                    <th>Sotildi</th>
+                    <th>Qoldi</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100px">
+                        {% else %}
+                            <img src="/static/img/no-image.jpg" alt="No image" width="60">
+                        {% endif %}
+                    </td>
+                    <td class="name">{{ product.name }}</td>
+                    <td>{{ product.total_quantity }}</td>
+                    <td>{{ product.sell_price }}</td>
+                    <td>{{ product.sold_quantity }}</td>
+                    <td>{{ product.remaining_quantity }}</td>
+                    <td class="pen">
+                        <a href="{% url 'edit_product' product.id %}" style="color: lime;"><i class='bx bxs-pencil'></i></a>
+                    </td>
+                    <td>
+                        <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')" style="color: red;">
+                            <i class='bx bxs-trash-alt'></i>
+                        </a>
+
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="9">Kechirasiz mahsulot topilmadi.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

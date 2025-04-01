@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savdo do'koni</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+
+    <section>
+        <!-- Header ------------------------- -->
+        <header>
+            
+            <!-- Logo ----------------- -->
+            <div class="logo">
+                <h2>
+                    <a href="#">
+                        Savdo <br>
+                        Do'koni
+                    </a>
+                </h2>
+            </div>
+            
+            <!-- Navbar ----------------------- -->
+            <nav class="navbar">
+                <ul class="menu-links">
+                <span id="close-menu-btn" class="material-symbols-outlined"><i class='bx bx-x bx-spin'></i></span>
+                <li><a href="{% url 'trade' %}">Savdo<br>bo'limi</a></li>
+                <li><a href="{% url 'product_list' %}">Barcha<br>Mahsulotlar</a></li>
+                <li><a href="{% url 'low_stock_products' %}">Kamaygan<br>Mahsulotlar </a></li>
+                <li><a href="#">Nasiya<br>Savdo</a></li>
+                <li><a href="{% url 'logout' %}">Chiqish</a></li>
+            </ul>
+            <span id="hamburger-btn" class="material-symbols-outlined"><i class='bx bx-menu'></i></span>
+        </nav>
+    </header>
+    
+    <!-- Asosiy Bo'lim --------------- -->
+</section>
+
+<script src="{% static 'js/main.js'%}"></script>
+</body>
+</html>

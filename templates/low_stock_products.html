@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kamaygan Mahsulotlar</title>
+    <style>
+        table {
+            width: 70%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="color: red;">⚠️ Kamaygan Mahsulotlar</h2>
+    <form method="GET" action="{% url 'low_stock_products' %}">
+        <input type="search" name="q" value="{{ query }}" placeholder="Kamaygan mahsulotlarni qidiring...">
+        <button type="submit">Qidirish</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Nomi</th>
+                <th>Jami</th>
+                <th>Sotilgan</th>
+                <th>Qolgan</th>
+                <th>Minimal</th>
+                <th>O‘z narxi</th>
+                <th>Sotish narxi</th>
+                <th>Foyiz</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in low_stock_products %}
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.total_quantity }}</td>
+                <td>{{ product.sold_quantity }}</td>
+                <td>{{ product.remaining_quantity }}</td>
+                <td>{{ product.min_quantity }}</td>
+                <td>{{ product.cost_price }}</td>
+                <td>{{ product.sell_price }}</td>
+                <td>{{ product.profit_margin|floatformat:2 }} %</td>
+                <td>
+                    <a href="{% url 'edit_product' product.id %}">✏️ Tahrirlash</a> |
+                    <a href="{% url 'delete_product' product.id %}" onclick="return confirm('Haqiqatan ham o‘chirmoqchimisiz?')">🗑️ O‘chirish</a>
+                </td>
+                <td>
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="100">
+                    {% else %}
+                        <img src="/static/img/no-image.jpg" alt="No image" width="60">
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="8">Kamaygan mahsulot yo‘q.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
